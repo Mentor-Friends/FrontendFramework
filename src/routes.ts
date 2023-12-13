@@ -7,3 +7,4 @@ export const routes: any = {
     '/resume': resumePage,
     '/contact': contactPage,
   };
+

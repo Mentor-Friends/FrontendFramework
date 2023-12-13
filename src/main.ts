@@ -10,25 +10,38 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <nav>
     <ul>
       <li>
-        <a href="/">Home</a>
+        <a routerLink="/">Home</a>
       </li>
       <li>
-        <a href="/resume">Resume</a>
+        <a routerLink="/resume">Resume</a>
       </li>
       <li>
-        <a href="/contact">Contact</a>
+        <a routerLink="/contact">Contact</a>
       </li>
     </ul>
   </nav>
 </header>
   <div id="${GlobalConst.globalPrefix}content"></div>
 `;
-
 // Routing
+
 // Load Content based on route data
-let contentDiv = document.querySelectorAll<HTMLElement>(
+const contentDiv = document.querySelectorAll<HTMLElement>(
   `#${GlobalConst.globalPrefix}content`
 )[0];
 
-let newPage = new routes[window.location.pathname]();
-contentDiv.innerHTML = newPage.html;
+const routerLinks = document.querySelectorAll("[routerLink]");
+routerLinks.forEach((router: any) => {
+  router.addEventListener("click", (e: any) => {
+    let pathname = e.target.getAttribute("routerLink");
+    window.history.pushState({}, pathname, window.location.origin + pathname);
+    let newPage = new routes[window.location.pathname]();
+    contentDiv.innerHTML = newPage.html;
+    return false;
+  });
+});
+
+window.onpopstate = () => {
+  let newPage = new routes[window.location.pathname]();
+  contentDiv.innerHTML = newPage.html;
+};
